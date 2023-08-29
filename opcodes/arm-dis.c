@@ -11851,6 +11851,10 @@ mapping_symbol_for_insn (bfd_vma pc, struct disassemble_info *info,
   bool found = false;
   bool can_use_search_opt_p = false;
 
+  /* Sanity check.  */
+  if (info == NULL)
+    return false;
+
   /* Default to DATA.  A text section is required by the ABI to contain an
      INSN mapping symbol at the start.  A data section has no such
      requirement, hence if no mapping symbol is found the section must
@@ -11864,7 +11868,7 @@ mapping_symbol_for_insn (bfd_vma pc, struct disassemble_info *info,
     type = MAP_ARM;
   struct arm_private_data *private_data;
 
-  if (info->private_data == NULL
+  if (info->private_data == NULL || info->symtab == NULL
       || bfd_asymbol_flavour (*info->symtab) != bfd_target_elf_flavour)
     return false;
 
